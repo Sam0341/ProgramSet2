@@ -1,0 +1,340 @@
+//============================================================================
+// Name        : programset1.cpp
+// Author      : Samuel Gonzalez
+// Version     :
+// Copyright   : Your copyright notice
+// Description : Hello World in C++, Ansi-style
+//============================================================================
+
+#include <iostream>
+using std::cout;
+using std::cin;
+using std::endl;
+
+#include<cstdlib>
+#include "Miscellaneous.h"
+
+
+void showMenu();
+int getResponse();
+
+int main()
+{
+
+    int response;
+
+
+    //NOTE: each time you finish writing a function and want to test it,
+    //uncomment the case within the switch that calls that function.
+    while ( ( response = getResponse() ) != 5 )
+    {
+        switch( response )
+        {
+            case 1: multiplication(); cout<<"\n\n"; break;
+            case 2: numberGuess(); cout<<"\n\n"; break;
+            case 3:printSquare(); cout<<"\n\n"; break;
+            case 4: calculatePayroll(); cout<<"\n\n"; break;
+        }
+        system("pause");
+    }
+
+    cout<<"\n\nThank you and have a nice day!\n\n";
+
+    return 0;
+
+}
+
+
+void showMenu()
+{
+
+    system("cls");
+    cout<<"***********************************\n";
+    cout<<"* Press 1 to do multiplication    *\n";
+    cout<<"* Press 2 to play number guessing *\n";
+    cout<<"* Press 3 to print a square       *\n";
+    cout<<"* Press 4 to calculate payroll    *\n";
+    cout<<"* Press 5 to Quit                 *\n";
+    cout<<"***********************************\n";
+    cout<<"=====> ";
+
+}
+
+
+int getResponse()
+{
+    int response;
+    showMenu();
+    cin>> response;
+
+    while( response < 1 || response > 5)
+    {
+        showMenu();
+        cin >> response;
+    }
+    return response;
+
+
+}
+
+
+
+
+/*
+ * Miscellaneous.h
+ *
+ *  Created on: Nov 16, 2023
+ *      Author: samuel gonzalez
+ */
+
+#ifndef MISCELLANEOUS_H_
+#define MISCELLANEOUS_H_
+
+void printSquare();
+void calculatePayroll();
+void numberGuess();
+void multiplication();
+
+#endif /* MISCELLANEOUS_H_ */
+
+
+
+
+/*
+ * printSquare.cpp
+ *
+ *  Created on: Nov 16, 2023
+ *      Author: samuel gonzalez
+ */
+
+#include <iostream>
+void printSquare() {
+    int size;
+    do {
+        std::cout << "Enter the size of the square (1-20): ";
+        std::cin >> size;
+        if (size < 1 || size > 20) {
+            std::cout << "Invalid size. Please enter a size between 1 and 20.\n";
+        }
+    } while (size < 1 || size > 20);
+
+    for (int i = 1; i <= size; ++i) {
+        for (int j = 1; j <= size; ++j) {
+            if (i == 1 || i == size || j == 1 || j == size) {
+                std::cout << "*";
+            } else {
+                std::cout << " ";
+            }
+        }
+        std::cout << std::endl;
+    }
+}
+
+
+
+
+/*
+ * calculatePayroll.cpp
+ *
+ *  Created on: Nov 16, 2023
+ *      Author: samuel gonzalez
+ */
+#include <iostream>
+
+using namespace std;
+
+void calculatePayroll() {
+    while (true) {
+        cout << "Enter the paycode (1 for Managers, 2 for Hourly Workers, 3 for Commission Workers, 4 for Pieceworkers, 5 to quit): ";
+        int paycode;
+        cin >> paycode;
+
+        if (paycode == 5) {
+            cout << "Exiting the payroll calculation." << endl;
+            break;
+        }
+        switch (paycode) {
+            case 1: {  // Managers
+                double weekly_salary;
+                cout << "Enter the fixed weekly salary for the manager: $";
+                cin >> weekly_salary;
+                cout << "The weekly pay for the manager is: $" << weekly_salary << endl;
+                break;
+            }
+
+            case 2: {  // Hourly Workers
+                double hourly_wage, hours_worked;
+                cout << "Enter the hourly wage for the worker: $";
+                cin >> hourly_wage;
+                cout << "Enter the number of hours worked: ";
+                cin >> hours_worked;
+
+                double weekly_pay;
+                if (hours_worked <= 40) {
+                    weekly_pay = hourly_wage * hours_worked;
+                } else {
+                    double overtime_hours = hours_worked - 40;
+                    weekly_pay = (hourly_wage * 40) + (1.5 * hourly_wage * overtime_hours);
+                }
+
+                cout << "The weekly pay for the hourly worker is: $" << weekly_pay << endl;
+                break;
+            }
+
+            case 3: {  // Commission Workers
+                double gross_weekly_sales;
+                cout << "Enter the gross weekly sales for the commission worker: $";
+                cin >> gross_weekly_sales;
+                double weekly_pay = 250 + (0.057 * gross_weekly_sales);
+                cout << "The weekly pay for the commission worker is: $" << weekly_pay << endl;
+                break;
+            }
+            default:
+                cout << "Invalid paycode. Please enter a valid paycode." << endl;
+        }
+    }
+}
+
+
+
+
+/*
+ * numberGuess.cpp
+ *
+ *  Created on: Nov 16, 2023
+ *      Author: samuel gonzalez
+ */
+#include <iostream>
+#include <cstdlib>  
+#include <ctime>    
+
+using namespace std;
+
+void numberGuess() {
+    // Seed the random number generator
+    srand(static_cast<unsigned int>(time(0)));
+
+    // Generate a random number between 1 and 1000
+    int secretNumber = rand() % 1000 + 1;
+
+    int guess;
+    int attempts = 0;
+
+    cout << "I have a number between 1 and 1000." << endl;
+    cout << "Can you guess my number?" << endl;
+
+    do {
+        cout << "Please type your guess: ";
+        cin >> guess;
+        attempts++;
+
+        if (guess == secretNumber) {
+            cout << "Excellent! You guessed the number!" << endl;
+
+            if (attempts <= 10) {
+                cout << "Ahah! You know the secret!" << endl;
+            } else {
+                cout << "Either you know the secret or you got lucky!" << endl;
+            }
+
+        } else if (guess < secretNumber) {
+            cout << "Too low. Try again." << endl;
+        } else {
+            cout << "Too high. Try again." << endl;
+        }
+
+    } while (guess != secretNumber);
+
+    cout << "You made " << attempts << " guesses." << endl;
+
+    if (attempts > 10) {
+        cout << "You should be able to do better!" << endl;
+    }
+}
+
+
+
+
+
+
+/*
+ * multiplication.cpp
+ *
+ *  Created on: Nov 26, 2023
+ *      Author: samuel gonzalez
+ */
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+
+using namespace std;
+
+void multiplication() {
+    // Seed the random number generator
+    srand(static_cast<unsigned int>(time(0)));
+
+    int correctAnswers = 0;
+    int incorrectAnswers = 0;
+
+    for (int i = 0; i < 10; ++i) {
+        // Generate two random one-digit integers
+        int num1 = rand() % 9 + 1;
+        int num2 = rand() % 9 + 1;
+
+        // Ask the multiplication question
+        cout << "How much is " << num1 << " times " << num2 << "? ";
+
+        int userAnswer;
+        cin >> userAnswer;
+
+        // Check the user's answer
+        if (userAnswer == num1 * num2) {
+            // Correct response
+            int responseCode = rand() % 4 + 1;  // Generate a random number from 1 to 4 for response selection
+
+            switch (responseCode) {
+                case 1:
+                    cout << "Very good!" << endl;
+                    break;
+                case 2:
+                    cout << "Excellent!" << endl;
+                    break;
+                case 3:
+                    cout << "Nice work!" << endl;
+                    break;
+                case 4:
+                    cout << "Keep up the good work!" << endl;
+                    break;
+            }
+
+            correctAnswers++;
+        } else {
+            int responseCode = rand() % 4 + 1;
+
+            switch (responseCode) {
+                case 1:
+                    cout << "No. Please try again." << endl;
+                    break;
+                case 2:
+                    cout << "Wrong. Try once more." << endl;
+                    break;
+                case 3:
+                    cout << "Don't give up!" << endl;
+                    break;
+                case 4:
+                    cout << "No. Keep trying." << endl;
+                    break;
+            }
+            incorrectAnswers--;
+            i--;
+        }
+    }
+    double percentageCorrect = (static_cast<double>(correctAnswers) / 10) * 100;
+    cout << "You answered " << correctAnswers << " questions correctly out of 10." << endl;
+
+    if (percentageCorrect < 75) {
+        cout << "Please ask your teacher for extra help." << endl;
+    }
+}
+
+
